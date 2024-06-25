@@ -166,7 +166,8 @@ public class ImageManipulator extends JFrame {
         imageLabel.setIcon(new ImageIcon(image));
     }
 
-    // כביכןל ככה צריך לעשות אם רוצים לשנות ממש את ערכי האיקס למעלה השתמשתי בממשק שמשותף לכולם אבל יש דברים ספציפים שחייב לרוץ מחדש על הלולאות^
+    // כביכןל ככה צריך לעשות אם רוצים לשנות ממש את ערכי האיקס והוואי
+    // למעלה השתמשתי בממשק שמשותף לכולם אבל יש דברים ספציפים כמו mirror וכו שחייב לרוץ מחדש על הלולאות^
 //    private void convertToGrayscal() {
 //        int width = image.getWidth();
 //        int height = image.getHeight();
