@@ -1,3 +1,4 @@
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -5,17 +6,21 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import javax.imageio.ImageIO;
+
+import static utilz.Constants.SizeImage.*;
+import static utilz.Constants.Manipulation.*;
+import static utilz.Constants.ColorRGB.*;
 
 public class ImageManipulator extends JFrame {
+
     private BufferedImage image;
     private BufferedImage originalImage;
     private JLabel imageLabel;
 
     public ImageManipulator() {
-        super("Image Manipulator");
+        super(TEXT_1);
 
-        JButton openButton = new JButton("פתח תמונה");
+        JButton openButton = new JButton(TEXT_2);
         openButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -23,33 +28,37 @@ public class ImageManipulator extends JFrame {
             }
         });
 
-        String[] manipulations = {"בחר מניפולציה","Restore original image", "Grayscal", "Negative", "Sepia", "Mirror"}; // הוספת המניפולציה
-        JComboBox<String> manipulationBox = new JComboBox<>(manipulations);
+        JComboBox<String> manipulationBox = new JComboBox<>(MANIPULATIONS);
         manipulationBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JComboBox<String> combo = (JComboBox<String>) e.getSource();
                 String selectedManipulation = (String) combo.getSelectedItem();
-                System.out.println("Selected Manipulation: " + selectedManipulation);
+                System.out.println(TEXT_3 + selectedManipulation);
                 if (image != null) {
                     restoreOriginalImage();
                     switch (selectedManipulation) {
-                        case "Restore original image":
+                        case C1:
                             restoreOriginalImage();
                             break;
-                        case "Grayscal":
+                        case C2:
                             convertToGrayscal();
                             break;
-                        case "Negative":
+                        case C3:
                             convertNegative();
                             break;
-                        case "Sepia":
+                        case C4:
                             convertSepia();
                             break;
-                        case "Mirror":
+                        case C5:
                             convertToMirror();
                             break;
                         // כאן תוסיפו CASE של מנפולציה אחרת כמובן צריך לעשות לה מתודה נפרדת כמו האלה למעלה
+                        case null:
+                            break;
+                        default:
+                            restoreOriginalImage();
+                            break;
                     }
                 }
             }
@@ -59,7 +68,7 @@ public class ImageManipulator extends JFrame {
 
         JPanel controlPanel = new JPanel();// זה הפאנל לכפתורים של התפריט הנפתח
         controlPanel.add(openButton);
-        controlPanel.add(new JLabel("Survived Status:"));
+        controlPanel.add(new JLabel(TEXT_4));
         controlPanel.add(manipulationBox);
 
 
@@ -68,7 +77,7 @@ public class ImageManipulator extends JFrame {
         add(new JScrollPane(imageLabel), BorderLayout.CENTER);
 
 
-        setSize(1000, 800); // גודל החלון של התמונה בסוף הפרויקט אני אשנה הכל לפינאלים ואסדר
+        setSize(WIDTH_DEFAULT, HEIGHT_DEFAULT);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
@@ -84,13 +93,12 @@ public class ImageManipulator extends JFrame {
                 originalImage = ImageIO.read(selectedFile); // שמרתי פה את העתק של התמונה המקורית כדי שיהיה אפשר לעשות עליה מחדש עריכות
                 imageLabel.setIcon(new ImageIcon(image));
             } catch (IOException ex) {
-                JOptionPane.showMessageDialog(this, "שגיאה בפתיחת התמונה", "שגיאה", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, TEXT_5, TEXT_6, JOptionPane.ERROR_MESSAGE);
             }
         }
     }
 
     private void restoreOriginalImage() {
-        // לשחזר את התמונה המקורית
         for (int y = 0; y < originalImage.getHeight(); y++) {
             for (int x = 0; x < originalImage.getWidth(); x++) {
                 image.setRGB(x, y, originalImage.getRGB(x, y));
@@ -122,9 +130,9 @@ public class ImageManipulator extends JFrame {
 
     private void convertNegative() {
         manipulateImage(color -> {
-            int r = 255 - color.getRed();
-            int g = 255 - color.getGreen();
-            int b = 255 - color.getBlue();
+            int r = MAX - color.getRed();
+            int g = MAX - color.getGreen();
+            int b = MAX - color.getBlue();
             return new Color(r, g, b);
         });
     }
@@ -139,9 +147,9 @@ public class ImageManipulator extends JFrame {
             int tg = (int) (0.349 * r + 0.686 * g + 0.168 * b);
             int tb = (int) (0.272 * r + 0.534 * g + 0.131 * b);
 
-            if (tr > 255) {r = 255;} else {r = tr;}
-            if (tg > 255) {g = 255;} else {g = tg;}
-            if (tb > 255) {b = 255;} else {b = tb;}
+            if (tr > MAX) {r = MAX;} else {r = tr;}
+            if (tg > MAX) {g = MAX;} else {g = tg;}
+            if (tb > MAX) {b = MAX;} else {b = tb;}
 
             return new Color(r, g, b);
         });
