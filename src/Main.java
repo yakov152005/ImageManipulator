@@ -1,5 +1,6 @@
-import javax.swing.*;
+import image.ImageManipulator;
 
+import javax.swing.*;
 public class Main {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
@@ -8,6 +9,5 @@ public class Main {
                 new ImageManipulator().setVisible(true);
             }
         });
-
     }
 }

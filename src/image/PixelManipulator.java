@@ -1,3 +1,5 @@
+package image;
+
 import java.awt.*;
 
 public interface PixelManipulator {
